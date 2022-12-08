@@ -6,9 +6,12 @@
         <h4 class="mb-2">尋找餐廳：</h4>
         <div class="input-group">
           <input type="text" name="keyword" class="form-control" placeholder="輸入餐廳、分類" aria-label="Restaurant Name..."
-            value="" aria-describedby="search-button">
+            value="{{keyword}}" aria-describedby="search-button">
           <select name="category">
-            <option value="">餐廳類別</option>
+            {{#if category}}
+            <option style="display: none">{{category}}</option>
+            {{/if}}
+            <option value="">全部</option>
             {{#each categories}}
             <option>{{this}}</option>
             {{/each}}

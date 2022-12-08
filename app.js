@@ -2,7 +2,9 @@ const express = require("express")
 const exphbs = require("express-handlebars")
 const restaurantList = require("./restaurant.json").results
 
-function categoriesList() {
+
+// 取得不重複之餐廳類別陣列
+function categoryList() {
   const categories = []
   restaurantList.forEach(restaurant => {
     if (!categories.includes(restaurant.category)) {
@@ -12,6 +14,12 @@ function categoriesList() {
   return categories
 }
 
+// 取得不重複之餐廳類別陣列(另一寫法)
+// const categories = restaurantList.map(restaurant => restaurant.category)
+// const categoryList = categories.filter((item, index, arr) => {
+//   return arr.indexOf(item) === index;
+// })
+
 const app = express()
 app.engine("hbs", exphbs({ defaultLayout: "main", extname: "hbs" }))
 app.set("view engine", "hbs")
@@ -19,7 +27,7 @@ app.set("view engine", "hbs")
 app.use(express.static('public'))
 
 app.get("/", (req, res) => {
-  res.render("index", { restaurants: restaurantList, categories: categoriesList() })
+  res.render("index", { restaurants: restaurantList, categories: categoryList() })
 })
 
 app.get("/restaurants/:id", (req, res) => {
@@ -34,7 +42,7 @@ app.get("/search", (req, res) => {
   const restaurantSearch = restaurantList.filter(restaurant => {
     return restaurant.name.toLowerCase().includes(keyword.toLowerCase()) && restaurant.category.includes(category)
   })
-  res.render("index", { restaurants: restaurantSearch, categories: categoriesList() })
+  res.render("index", { restaurants: restaurantSearch, categories: categoryList(), keyword: keyword, category: category })
 })
 
 const port = 3000
