@@ -1,7 +1,8 @@
 const express = require("express")
 const exphbs = require("express-handlebars")
 const mongoose = require("mongoose")
-const restaurantList = require("./restaurant.json").results
+const Restaurants = require("./models/Restaurant")
+
 
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config()
@@ -15,23 +16,6 @@ db.once('open', () => {
   console.log('mongodb connected!')
 })
 
-// 取得不重複之餐廳類別陣列
-// function categoryList() {
-//   const categories = []
-//   restaurantList.forEach(restaurant => {
-//     if (!categories.includes(restaurant.category)) {
-//       categories.push(restaurant.category)
-//     }
-//   })
-//   return categories
-// }
-
-// 取得不重複之餐廳類別陣列(另一寫法)
-const categoryList = restaurantList.map(restaurant => restaurant.category)
-  .filter((item, index, arr) => {
-    return arr.indexOf(item) === index;
-  })
-
 const app = express()
 app.engine("hbs", exphbs({ defaultLayout: "main", extname: "hbs" }))
 app.set("view engine", "hbs")
@@ -39,7 +23,17 @@ app.set("view engine", "hbs")
 app.use(express.static('public'))
 
 app.get("/", (req, res) => {
-  res.render("index", { restaurants: restaurantList, categories: categoryList })
+  return Restaurants.find()
+    .lean()
+    .then(restaurant => {
+      const categories = restaurant
+        .map(restaurant => restaurant.category)
+        .filter((item, index, arr) => {
+          return arr.indexOf(item) === index;
+        });
+      res.render("index", { restaurant, categories })
+    })
+    .catch(error => console.log(error))
 })
 
 app.get("/restaurants/:id", (req, res) => {
