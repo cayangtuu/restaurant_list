@@ -6,9 +6,14 @@ const restaurantList = require("./restaurant.json").results
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config()
 }
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 const db = mongoose.connection
-
+db.on('error', () => {
+  console.log('mongodb error!')
+})
+db.once('open', () => {
+  console.log('mongodb connected!')
+})
 
 // 取得不重複之餐廳類別陣列
 // function categoryList() {
