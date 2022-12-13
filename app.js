@@ -23,7 +23,7 @@ app.set("view engine", "hbs")
 app.use(express.static('public'))
 
 app.get("/", (req, res) => {
-  return Restaurants.find()
+  Restaurants.find()
     .lean()
     .then(restaurant => {
       const categories = restaurant
@@ -38,17 +38,31 @@ app.get("/", (req, res) => {
 
 app.get("/restaurants/:id", (req, res) => {
   const id = req.params.id
-  const restaurantOne = restaurantList.find(restaurant => restaurant.id.toString() === id)
-  res.render("show", { restaurant: restaurantOne })
+  Restaurants.findById(id)
+    .lean()
+    .then(restaurant => res.render("show", { restaurant }))
+    .catch(error => console.log(error))
 })
 
 app.get("/search", (req, res) => {
   const keyword = req.query.keyword
   const category = req.query.category
-  const restaurantSearch = restaurantList.filter(restaurant => {
-    return restaurant.name.toLowerCase().includes(keyword.toLowerCase()) && restaurant.category.includes(category)
-  })
-  res.render("index", { restaurants: restaurantSearch, categories: categoryList, keyword: keyword, category: category })
+  Restaurants.find()
+    .lean()
+    .then(restaurant => {
+      const restaurantSearch = restaurant
+        .filter(restaurant => {
+          return restaurant.name.toLowerCase().includes(keyword.toLowerCase()) &&
+            restaurant.category.includes(category)
+        });
+      console.log(restaurantSearch)
+      const categories = restaurant
+        .map(restaurant => restaurant.category)
+        .filter((item, index, arr) => {
+          return arr.indexOf(item) === index;
+        });
+      res.render("index", { restaurant: restaurantSearch, categories, keyword, category })
+    })
 })
 
 const port = 3000
