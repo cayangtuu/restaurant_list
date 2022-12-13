@@ -31,25 +31,29 @@
     <div class="col-md-10 col-12 mx-auto">
       <div class="row row-cols-sm-3">
         {{#each restaurants}}
-        <a href="/restaurants/{{this.id}}" class="text-secondary">
-          <div class="card mb-3">
-            <img class="card-img-top" src="{{this.image}}" alt="{{this.name}}">
-            <div class="card-body p-3">
-              <h6 class="card-title mb-1">{{this.name}}</h6>
+        <div class="card mb-3 ">
+          <img class="card-img-top" src="{{this.image}}" alt="{{this.name}}">
+          <div class="card-body p-3">
+            <h6 class="card-title mb-1">{{this.name}}</h6>
 
-              <div class="restaurant-category mb-1">
-                <i class="fas fa-utensils pr-2"></i>
-                {{this.category}}
-              </div>
-
-              <span class="badge badge-pill badge-danger font-weight-normal bg-danger">
-                {{this.rating}}
-                <i class="fas fa-star fa-xs"></i>
-              </span>
-
+            <div class="restaurant-category mb-1">
+              <i class="fas fa-utensils pr-2"></i>
+              {{this.category}}
             </div>
+
+            <span class="badge badge-pill badge-danger font-weight-normal bg-danger">
+              {{this.rating}}
+              <i class="fas fa-star fa-xs"></i>
+            </span>
           </div>
-        </a>
+          <div class="d-flex justify-content-end flex-wrap mb-1">
+            <a href="/restaurants/{{this.id}}/edit" class="btn btn-sm text-secondary">Edit</a>
+            <a href="/restaurants/{{this.id}}" class="btn text-secondary btn-sm">Detail</a>
+            <form action="/restaurants/{{this.id}}/delete" method="POST">
+              <button type="submit" class="btn btn-outline-danger btn-sm" style="font-weight:bold">Delete</button>
+            </form>
+          </div>
+        </div>
         {{/each}}
       </div>
     </div>
