@@ -25,7 +25,7 @@ app.use(express.static('public'))
 app.use(express.urlencoded({ extended: true }))
 
 app.get("/", (req, res) => {
-  Restaurants.find()
+  return Restaurants.find()
     .lean()
     .then(restaurant => {
       const categories = restaurant
@@ -35,6 +35,26 @@ app.get("/", (req, res) => {
         });
       res.render("index", { restaurant, categories })
     })
+    .catch(error => console.log(error))
+})
+
+app.get("/restaurants/new", (req, res) => {
+  Restaurants.find()
+    .lean()
+    .then(restaurant => {
+      const categories = restaurant
+        .map(restaurant => restaurant.category)
+        .filter((item, index, arr) => {
+          return arr.indexOf(item) === index;
+        })
+      res.render("new", { categories })
+    })
+    .catch(error => console.log(error))
+})
+
+app.post("/restaurants", (req, res) => {
+  Restaurants.create(req.body)
+    .then(() => res.redirect("/"))
     .catch(error => console.log(error))
 })
 
@@ -64,6 +84,7 @@ app.get("/search", (req, res) => {
         });
       res.render("index", { restaurant: restaurantSearch, categories, keyword, category })
     })
+    .catch(error => console.log(error))
 })
 
 app.get("/restaurants/:id/edit", (req, res) => {
@@ -99,7 +120,7 @@ app.post("/restaurants/:id/edit", (req, res) => {
     .catch(error => console.log(error))
 })
 
-app.post("restaurants/:id/delete", (req, res) => {
+app.post("/restaurants/:id/delete", (req, res) => {
   const id = req.params.id
   Restaurants.findById(id)
     .then(restaurant => restaurant.remove())
