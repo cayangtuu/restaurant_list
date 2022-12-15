@@ -1,6 +1,7 @@
 const express = require("express")
 const exphbs = require("express-handlebars")
 const mongoose = require("mongoose")
+const restaurant = require("./models/Restaurant")
 const Restaurants = require("./models/Restaurant")
 
 
@@ -21,6 +22,7 @@ app.engine("hbs", exphbs({ defaultLayout: "main", extname: "hbs" }))
 app.set("view engine", "hbs")
 
 app.use(express.static('public'))
+app.use(express.urlencoded({ extended: true }))
 
 app.get("/", (req, res) => {
   Restaurants.find()
@@ -55,7 +57,6 @@ app.get("/search", (req, res) => {
           return restaurant.name.toLowerCase().includes(keyword.toLowerCase()) &&
             restaurant.category.includes(category)
         });
-      console.log(restaurantSearch)
       const categories = restaurant
         .map(restaurant => restaurant.category)
         .filter((item, index, arr) => {
@@ -63,6 +64,39 @@ app.get("/search", (req, res) => {
         });
       res.render("index", { restaurant: restaurantSearch, categories, keyword, category })
     })
+})
+
+app.get("/restaurants/:id/edit", (req, res) => {
+  const id = req.params.id
+  Restaurants.findById(id)
+    .lean()
+    .then(restaurant => {
+      Restaurants.find()
+        .lean()
+        .then(restaurants => {
+          const categories = restaurants
+            .map(restaurants => restaurants.category)
+            .filter((item, index, arr) => {
+              return arr.indexOf(item) === index;
+            })
+          res.render("edit", { restaurant, categories })
+        })
+        .catch(error => console.log(error))
+    })
+    .catch(error => console.log(error))
+})
+
+app.post("/restaurants/:id/edit", (req, res) => {
+  const id = req.params.id
+  Restaurants.findById(id)
+    .then(restaurant => {
+      for (const item in req.body) {
+        restaurant[item] = req.body[item]
+      }
+      return restaurant.save()
+    })
+    .then(() => res.redirect(`/restaurants/${id}`))
+    .catch(error => console.log(error))
 })
 
 const port = 3000
