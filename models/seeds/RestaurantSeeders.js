@@ -16,5 +16,5 @@ db.once('open', () => {
   restaurantList.forEach(restaurant => {
     restaurantModel.create(restaurant)
   });
-  console.log("done")
+  console.log("Restaurant data insert done!")
 })
