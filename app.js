@@ -24,38 +24,50 @@ app.set("view engine", "hbs")
 app.use(express.static('public'))
 app.use(express.urlencoded({ extended: true }))
 
-app.get("/", (req, res) => {
+let categoryList = function () {
   return Restaurants.find()
     .lean()
     .then(restaurant => {
-      const categories = restaurant
+      return restaurant
         .map(restaurant => restaurant.category)
         .filter((item, index, arr) => {
           return arr.indexOf(item) === index;
         });
-      res.render("index", { restaurant, categories })
     })
-    .catch(error => console.log(error))
-})
+}
 
-app.get("/restaurants/new", (req, res) => {
+app.get("/", (req, res) => {
   Restaurants.find()
     .lean()
     .then(restaurant => {
-      const categories = restaurant
-        .map(restaurant => restaurant.category)
-        .filter((item, index, arr) => {
-          return arr.indexOf(item) === index;
-        })
+      categoryList().then(categories => {
+        res.render("index", { restaurant, categories })
+      })
+    })
+    .catch(error => {
+      console.log(error)
+      res.render("error", { "errmsg": error.message })
+    })
+})
+
+app.get("/restaurants/new", (req, res) => {
+  categoryList()
+    .then(categories => {
       res.render("new", { categories })
     })
-    .catch(error => console.log(error))
+    .catch(error => {
+      console.log(error)
+      res.render("error", { "errmsg": error.message })
+    })
 })
 
 app.post("/restaurants", (req, res) => {
   Restaurants.create(req.body)
     .then(() => res.redirect("/"))
-    .catch(error => console.log(error))
+    .catch(error => {
+      console.log(error)
+      res.render("error", { "errmsg": error.message })
+    })
 })
 
 app.get("/restaurants/:id", (req, res) => {
@@ -63,7 +75,10 @@ app.get("/restaurants/:id", (req, res) => {
   Restaurants.findById(id)
     .lean()
     .then(restaurant => res.render("show", { restaurant }))
-    .catch(error => console.log(error))
+    .catch(error => {
+      console.log(error)
+      res.render("error", { "errmsg": error.message })
+    })
 })
 
 app.get("/search", (req, res) => {
@@ -75,16 +90,16 @@ app.get("/search", (req, res) => {
       const restaurantSearch = restaurant
         .filter(restaurant => {
           return restaurant.name.toLowerCase().includes(keyword.toLowerCase()) &&
-            restaurant.category.includes(category)
+            restaurant.category.toLowerCase().includes(category.toLowerCase())
         });
-      const categories = restaurant
-        .map(restaurant => restaurant.category)
-        .filter((item, index, arr) => {
-          return arr.indexOf(item) === index;
-        });
-      res.render("index", { restaurant: restaurantSearch, categories, keyword, category })
+      categoryList().then(categories => {
+        res.render("index", { restaurant: restaurantSearch, categories, keyword, category })
+      })
     })
-    .catch(error => console.log(error))
+    .catch(error => {
+      console.log(error)
+      res.render("error", { "errmsg": error.message })
+    })
 })
 
 app.get("/restaurants/:id/edit", (req, res) => {
@@ -92,19 +107,14 @@ app.get("/restaurants/:id/edit", (req, res) => {
   Restaurants.findById(id)
     .lean()
     .then(restaurant => {
-      Restaurants.find()
-        .lean()
-        .then(restaurants => {
-          const categories = restaurants
-            .map(restaurants => restaurants.category)
-            .filter((item, index, arr) => {
-              return arr.indexOf(item) === index;
-            })
-          res.render("edit", { restaurant, categories })
-        })
-        .catch(error => console.log(error))
+      categoryList().then(categories => {
+        res.render("edit", { restaurant, categories })
+      })
     })
-    .catch(error => console.log(error))
+    .catch(error => {
+      console.log(error)
+      res.render("error", { "errmsg": error.message })
+    })
 })
 
 app.post("/restaurants/:id/edit", (req, res) => {
@@ -117,7 +127,10 @@ app.post("/restaurants/:id/edit", (req, res) => {
       return restaurant.save()
     })
     .then(() => res.redirect(`/restaurants/${id}`))
-    .catch(error => console.log(error))
+    .catch(error => {
+      console.log(error)
+      res.render("error", { "errmsg": error.message })
+    })
 })
 
 app.post("/restaurants/:id/delete", (req, res) => {
@@ -125,7 +138,10 @@ app.post("/restaurants/:id/delete", (req, res) => {
   Restaurants.findById(id)
     .then(restaurant => restaurant.remove())
     .then(() => res.redirect("/"))
-    .catch(error => console.log(error))
+    .catch(error => {
+      console.log(error)
+      res.render("error", { "errmsg": error.message })
+    })
 })
 
 const port = 3000
