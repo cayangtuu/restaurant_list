@@ -2,12 +2,13 @@
 一個簡易的餐廳網站，供使用者新增、瀏覽、編輯、刪除餐廳資訊，也可以透過餐廳名稱及餐廳類別進行搜尋。
 
 ### 網頁外觀
-![image](https://github.com/cayangtuu/restaurant_list/blob/main/public/photo/%E9%A4%90%E5%BB%B3%E5%B0%81%E9%9D%A2V2.PNG)
+![image](https://github.com/cayangtuu/restaurant_list/blob/main/public/photo/%E9%A4%90%E5%BB%B3%E5%B0%81%E9%9D%A2V3.PNG)
 
 ### 功能描述 (features)
-- 能瀏覽所有的餐廳，包含餐廳名稱、餐廳類別、評價星等
+- 瀏覽所有的餐廳，包含餐廳名稱、餐廳類別、評價星等
 - 點擊個別餐廳時，可以查看餐廳詳細訊息，包含餐廳地址、電話與介紹等
 - 可以依照餐廳名稱與餐廳類別進行搜尋
+- 可以按照搜尋結果進行排序
 - 可新增一間餐廳
 - 可編輯一間餐廳資訊
 - 可刪除一間餐廳
