@@ -2,25 +2,11 @@ const express = require("express")
 const router = express.Router()
 const Restaurants = require("../../models/Restaurant")
 
-let categoryList = function () {
-  return Restaurants.find()
-    .lean()
-    .then(restaurant => {
-      return restaurant
-        .map(restaurant => restaurant.category)
-        .filter((item, index, arr) => {
-          return arr.indexOf(item) === index;
-        });
-    })
-}
-
 router.get("/", (req, res) => {
   Restaurants.find()
     .lean()
     .then(restaurant => {
-      categoryList().then(categories => {
-        res.render("index", { restaurant, categories })
-      })
+      res.render("index", { restaurant })
     })
     .catch(error => {
       console.log(error)
@@ -30,18 +16,16 @@ router.get("/", (req, res) => {
 
 router.get("/search", (req, res) => {
   const keyword = req.query.keyword
-  const category = req.query.category
+  const sort = req.query.sort
   Restaurants.find()
     .lean()
+    .sort(sort)
     .then(restaurant => {
       const restaurantSearch = restaurant
         .filter(restaurant => {
-          return restaurant.name.toLowerCase().includes(keyword.toLowerCase()) &&
-            restaurant.category.toLowerCase().includes(category.toLowerCase())
+          return restaurant.name.toLowerCase().includes(keyword.toLowerCase())
         });
-      categoryList().then(categories => {
-        res.render("index", { restaurant: restaurantSearch, categories, keyword, category })
-      })
+      res.render("index", { restaurant: restaurantSearch, keyword, sort })
     })
     .catch(error => {
       console.log(error)
