@@ -50,8 +50,9 @@ http://localhost:3000
 - Visual Studio Code
 ##### Node環境及套件
 - Node.js-16.18.0
-- Express-4.16.4
-- Express-Handlebars-3.0.0
+- express-4.16.4
+- express-handlebars-3.0.0
+- method-override-3.0.0
 - mongoose-5.9.7
 - nodemon-2.0.20
 - dotenv-16.0.3
