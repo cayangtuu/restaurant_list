@@ -1,9 +1,9 @@
 const express = require("express")
 const router = express.Router()
-const Restaurants = require("../../models/Restaurant")
+const Restaurant = require("../../models/Restaurant")
 
 let categoryList = function () {
-  return Restaurants.find()
+  return Restaurant.find()
     .lean()
     .then(restaurant => {
       return restaurant
@@ -26,7 +26,7 @@ router.get("/new", (req, res) => {
 })
 
 router.post("/", (req, res) => {
-  Restaurants.create(req.body)
+  Restaurant.create(req.body)
     .then(() => res.redirect("/"))
     .catch(error => {
       console.log(error)
@@ -36,7 +36,7 @@ router.post("/", (req, res) => {
 
 router.get("/:id", (req, res) => {
   const id = req.params.id
-  Restaurants.findById(id)
+  Restaurant.findById(id)
     .lean()
     .then(restaurant => res.render("show", { restaurant }))
     .catch(error => {
@@ -47,7 +47,7 @@ router.get("/:id", (req, res) => {
 
 router.get("/:id/edit", (req, res) => {
   const id = req.params.id
-  Restaurants.findById(id)
+  Restaurant.findById(id)
     .lean()
     .then(restaurant => {
       categoryList().then(categories => {
@@ -62,7 +62,7 @@ router.get("/:id/edit", (req, res) => {
 
 router.put("/:id", (req, res) => {
   const id = req.params.id
-  Restaurants.findById(id)
+  Restaurant.findById(id)
     .then(restaurant => {
       for (const item in req.body) {
         restaurant[item] = req.body[item]
@@ -78,7 +78,7 @@ router.put("/:id", (req, res) => {
 
 router.delete("/:id", (req, res) => {
   const id = req.params.id
-  Restaurants.findById(id)
+  Restaurant.findById(id)
     .then(restaurant => restaurant.remove())
     .then(() => res.redirect("/"))
     .catch(error => {
