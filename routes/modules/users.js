@@ -11,21 +11,20 @@ router.post('/login', (req, res) => {
 router.get('/register', (req, res) => {
   return res.render('register')
 })
-router.post('/register', (req, res) => {
+router.post('/register', (req, res, next) => {
   const { name, email, password, confirmPassword } = req.body
-  User.findOne({ email })
+  if (password !== confirmPassword) throw new Error('Passwords do not match!')
+  return User.findOne({ email })
     .then(user => {
       if (user) {
-        console.log('warning')
-        req.flash('warning_msg', 'User already exists.')
-        return res.render('register', {
-          name, email, password, confirmPassword
-        })
+        req.flash('error_msg', 'User already exists!')
+        return res.redirect('back')
       }
-      return User.create({ name, email, password })
+      User.create({ name, email, password })
         .then(() => res.redirect('/'))
-        .catch(err => console.log(err))
+        .catch(err => next(err))
     })
+    .catch(err => next(err))
 })
 router.get('/logout', (req, res) => {
   req.logout()

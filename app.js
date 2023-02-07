@@ -4,16 +4,11 @@ const methodOverride = require("method-override")
 const flash = require("connect-flash")
 const session = require("express-session")
 const routes = require("./routes")
+const handlebarsHelpers = require("./helpers/handlebars-helpers")
 require("./config/mongoose")
 
 const app = express()
-app.engine("hbs", exphbs({
-  defaultLayout: "main", extname: "hbs", helpers: {
-    'ifEq': function (a, b, opts) {
-      return (a === b) ? opts.fn(this) : opts.inverse(this)
-    }
-  }
-}))
+app.engine("hbs", exphbs({ defaultLayout: "main", extname: "hbs", helpers: handlebarsHelpers }))
 app.set("view engine", "hbs")
 
 app.use(express.static('public'))
@@ -28,8 +23,8 @@ app.use(session({
 
 app.use(flash())
 app.use((req, res, next) => {
-  res.locals.success_message = req.flash("success_message")
-  res.locals.warning_msg = req.flash("warning_msg")
+  res.locals.success_msg = req.flash("success_msg")
+  res.locals.error_msg = req.flash("error_msg")
   next()
 })
 
