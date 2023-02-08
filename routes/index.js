@@ -10,7 +10,6 @@ router.use("/restaurants", authenticator, restaurants)
 router.use("/users", users)
 router.use("/", authenticator, home)
 
-
 router.use('/', generalErrorHandler)
 
 module.exports = router

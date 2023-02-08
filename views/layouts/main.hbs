@@ -20,7 +20,14 @@
           width="30" height="30" class="d-inline-block align-top" alt="我的餐廳清單">
         我的餐廳清單
       </a>
+      {{#if isAuthenticated}}
+      <div>
+        <a class="btn btn-outline-info" href="/restaurants/new">Create</a>
+        <a class="btn btn-outline-dark" href="/users/logout">Logout</a>
+      </div>
+      {{else}}
       <a class="btn btn-outline-dark" href="/users/login">Login</a>
+      {{/if}}
     </nav>
 
     <div class="banner"></div>

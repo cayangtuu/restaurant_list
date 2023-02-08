@@ -2,21 +2,20 @@ const express = require("express")
 const router = express.Router()
 const Restaurants = require("../../models/Restaurant")
 
-router.get("/", (req, res) => {
-  Restaurants.find()
+router.get("/", (req, res, next) => {
+  const userId = req.user._id
+  Restaurants.find({ userId })
     .lean()
     .then(restaurant => {
       res.render("index", { restaurant })
     })
-    .catch(error => {
-      console.log(error)
-      res.render("error", { "errmsg": error.message })
-    })
+    .catch(err => next(err))
 })
 
-router.get("/search", (req, res) => {
+router.get("/search", (req, res, next) => {
   const { keyword, sort } = req.query
-  Restaurants.find()
+  const userId = req.user._id
+  Restaurants.find({ userId })
     .lean()
     .sort((sort === 'asc' || sort === 'desc') ? { name: sort } : sort)
     .then(restaurant => {
@@ -27,10 +26,7 @@ router.get("/search", (req, res) => {
         });
       res.render("index", { restaurant: restaurantSearch, keyword, sort })
     })
-    .catch(error => {
-      console.log(error)
-      res.render("error", { "errmsg": error.message })
-    })
+    .catch(err => next(err))
 })
 
 module.exports = router

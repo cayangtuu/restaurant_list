@@ -14,10 +14,10 @@ module.exports = app => {
       User.findOne({ email })
         .then(user => {
           if (!user) {
-            return done(null, false, req.flash('err_msg', 'The email is not registered!'))
+            return done(null, false, req.flash('error_msg', 'The email is not registered!'))
           }
-          if (user.email !== email) {
-            return done(null, false, req.flash('err_msg', 'Email or Password incorrect!'))
+          if (user.password !== password) {
+            return done(null, false, req.flash('error_msg', 'Email or Password incorrect!'))
           }
           return done(null, user)
         })
