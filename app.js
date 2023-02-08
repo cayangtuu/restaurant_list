@@ -3,6 +3,7 @@ const exphbs = require("express-handlebars")
 const methodOverride = require("method-override")
 const flash = require("connect-flash")
 const session = require("express-session")
+const usePassport = require("./config/passport")
 const routes = require("./routes")
 const handlebarsHelpers = require("./helpers/handlebars-helpers")
 require("./config/mongoose")
@@ -20,6 +21,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }))
+usePassport(app)
 
 app.use(flash())
 app.use((req, res, next) => {
