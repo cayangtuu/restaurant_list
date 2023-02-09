@@ -15,13 +15,11 @@ router.get('/register', (req, res) => {
 })
 router.post('/register', (req, res, next) => {
   const { name, email, password, confirmPassword } = req.body
-  if (password !== confirmPassword) throw new Error('Passwords do not match!')
+  if (!email || !password || !confirmPassword) throw new Error('Email and Password is required!')
+  if (password !== confirmPassword) throw new Error('Password do not match!')
   return User.findOne({ email })
     .then(user => {
-      if (user) {
-        req.flash('error_msg', 'User already exists!')
-        return res.redirect('back')
-      }
+      if (user) throw new Error('User already exists!')
       User.create({ name, email, password })
         .then(() => res.redirect('/'))
         .catch(err => next(err))
