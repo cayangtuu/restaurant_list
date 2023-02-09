@@ -40,7 +40,7 @@ router.get("/:id", (req, res, next) => {
 router.get("/:id/edit", (req, res, next) => {
   const userId = req.user._id
   const _id = req.params.id
-  Promise.all([Restaurant.findOne({ _id, userId }).lean(), Restaurant.find({ userId })])
+  return Promise.all([Restaurant.findOne({ _id, userId }).lean(), Restaurant.find({ userId })])
     .then(([restaurant, restaurants]) => {
       const categories = categoryList(restaurants)
       res.render("edit", { restaurant, categories })
@@ -51,7 +51,7 @@ router.get("/:id/edit", (req, res, next) => {
 router.put("/:id", (req, res, next) => {
   const userId = req.user._id
   const _id = req.params.id
-  Restaurant.findOne({ _id, userId })
+  return Restaurant.findOne({ _id, userId })
     .then(restaurant => {
       for (const item in req.body) {
         restaurant[item] = req.body[item]
@@ -65,7 +65,7 @@ router.put("/:id", (req, res, next) => {
 router.delete("/:id", (req, res, next) => {
   const userId = req.user._id
   const _id = req.params.id
-  Restaurant.findOne({ _id, userId })
+  return Restaurant.findOne({ _id, userId })
     .then(restaurant => restaurant.remove())
     .then(() => res.redirect("/"))
     .catch(err => next(err))

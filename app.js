@@ -12,12 +12,16 @@ const app = express()
 app.engine("hbs", exphbs({ defaultLayout: "main", extname: "hbs", helpers: handlebarsHelpers }))
 app.set("view engine", "hbs")
 
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config()
+}
+
 app.use(express.static('public'))
 app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride("_method"))
 
 app.use(session({
-  secret: "ITiTsAsEcREt!",
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true
 }))
