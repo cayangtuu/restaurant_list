@@ -2,11 +2,7 @@
 一個簡易的餐廳網站，供使用者新增、瀏覽、編輯、刪除餐廳資訊，也可以透過餐廳名稱及餐廳類別進行搜尋。
 
 ### 網頁外觀
-##### 登入頁面
-![image](https://github.com/cayangtuu/restaurant_list/blob/main/public/photo/%E7%99%BB%E5%85%A5%E7%95%AB%E9%9D%A2.png)
-##### 註冊頁面
-![image](https://github.com/cayangtuu/restaurant_list/blob/main/public/photo/%E8%A8%BB%E5%86%8A%E7%95%AB%E9%9D%A2.png)
-##### 使用者登入瀏覽餐廳頁面
+#### 使用者登入瀏覽餐廳頁面
 ![image](https://github.com/cayangtuu/restaurant_list/blob/main/public/photo/%E7%99%BB%E5%85%A5%E9%A4%90%E5%BB%B3%E6%B8%85%E5%96%AE.png)
 
 ### 功能描述 (features)
