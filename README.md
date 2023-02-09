@@ -5,6 +5,8 @@
 ![image](https://github.com/cayangtuu/restaurant_list/blob/main/public/photo/%E9%A4%90%E5%BB%B3%E5%B0%81%E9%9D%A2V3.PNG)
 
 ### 功能描述 (features)
+- 使用者可以註冊並且登入個人餐廳清單頁面
+- 使用者可以透過facebook帳號登入頁面
 - 瀏覽所有的餐廳，包含餐廳名稱、餐廳類別、評價星等
 - 點擊個別餐廳時，可以查看餐廳詳細訊息，包含餐廳地址、電話與介紹等
 - 可以依照餐廳名稱與餐廳類別進行搜尋
@@ -12,7 +14,7 @@
 - 可新增一間餐廳
 - 可編輯一間餐廳資訊
 - 可刪除一間餐廳
-- 網頁伺服器出現問題時，將於網頁畫面中顯示"網頁發生錯誤"等錯誤訊息
+- 網頁伺服器出現問題時，將於網頁畫面中顯示錯誤訊息
 
 ### 安裝與執行步驟 (installation and execution)
 1. 打開終端機(Terminal)，將專案clone至本機位置
@@ -56,5 +58,10 @@ http://localhost:3000
 - mongoose-5.9.7
 - nodemon-2.0.20
 - dotenv-16.0.3
+- bcryptjs-2.4.3
+- connect-flash-0.1.1
+- passport-0.4.1
+- passport-local-1.0.0
+- passport-facebook-3.0.0
 ##### 資料庫
 - MongoDB
