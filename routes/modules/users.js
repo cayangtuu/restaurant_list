@@ -1,7 +1,7 @@
-const express = require("express")
-const passport = require("passport")
+const express = require('express')
+const passport = require('passport')
 const router = express.Router()
-const bcrypt = require("bcryptjs")
+const bcrypt = require('bcryptjs')
 const User = require('../../models/User')
 
 router.get('/login', (req, res) => {
@@ -32,7 +32,7 @@ router.post('/register', (req, res, next) => {
 })
 router.get('/logout', (req, res) => {
   req.logout()
-  req.flash('success_msg', "Logout successfully")
+  req.flash('success_msg', 'Logout successfully')
   return res.redirect('/users/login')
 })
 

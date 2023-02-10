@@ -1,12 +1,12 @@
-const bcrypt = require("bcryptjs")
-const Restaurant = require("../Restaurant")
-const User = require("../User")
-const restaurantList = require("./restaurant.json").results
-const userList = require("./user.json").results
-const db = require("../../config/mongoose")
+const bcrypt = require('bcryptjs')
+const Restaurant = require('../Restaurant')
+const User = require('../User')
+const restaurantList = require('./restaurant.json').results
+const userList = require('./user.json').results
+const db = require('../../config/mongoose')
 
 db.once('open', () => {
-  console.log("Start!")
+  console.log('Start!')
   return Promise.all(
     userList.map((user, userIndex) => {
       return bcrypt
@@ -29,7 +29,7 @@ db.once('open', () => {
     })
   )
     .then(() => {
-      console.log("Done!")
+      console.log('Done!')
       process.exit()
     })
     .catch(err => console.log(err))

@@ -1,9 +1,9 @@
-const express = require("express")
-const { Promise } = require("mongoose")
+const express = require('express')
+const { Promise } = require('mongoose')
 const router = express.Router()
-const Restaurant = require("../../models/Restaurant")
+const Restaurant = require('../../models/Restaurant')
 
-let categoryList = (restaurant) => {
+const categoryList = (restaurant) => {
   return restaurant
     .map(restaurant => restaurant.category)
     .filter((item, index, arr) => {
@@ -11,44 +11,44 @@ let categoryList = (restaurant) => {
     })
 }
 
-router.get("/new", (req, res, next) => {
+router.get('/new', (req, res, next) => {
   const userId = req.user._id
   return Restaurant.find({ userId })
     .lean()
     .then(restaurant => categoryList(restaurant))
-    .then(categories => res.render("new", { categories }))
+    .then(categories => res.render('new', { categories }))
     .catch(err => next(err))
 })
 
-router.post("/", (req, res, next) => {
+router.post('/', (req, res, next) => {
   const userId = req.user._id
   req.body.userId = userId
   return Restaurant.create(req.body)
-    .then(() => res.redirect("/"))
+    .then(() => res.redirect('/'))
     .catch(err => next(err))
 })
 
-router.get("/:id", (req, res, next) => {
+router.get('/:id', (req, res, next) => {
   const userId = req.user._id
   const _id = req.params.id
   return Restaurant.findOne({ _id, userId })
     .lean()
-    .then(restaurant => res.render("show", { restaurant }))
+    .then(restaurant => res.render('show', { restaurant }))
     .catch(err => next(err))
 })
 
-router.get("/:id/edit", (req, res, next) => {
+router.get('/:id/edit', (req, res, next) => {
   const userId = req.user._id
   const _id = req.params.id
   return Promise.all([Restaurant.findOne({ _id, userId }).lean(), Restaurant.find({ userId })])
     .then(([restaurant, restaurants]) => {
       const categories = categoryList(restaurants)
-      res.render("edit", { restaurant, categories })
+      res.render('edit', { restaurant, categories })
     })
     .catch(err => next(err))
 })
 
-router.put("/:id", (req, res, next) => {
+router.put('/:id', (req, res, next) => {
   const userId = req.user._id
   const _id = req.params.id
   return Restaurant.findOne({ _id, userId })
@@ -62,12 +62,12 @@ router.put("/:id", (req, res, next) => {
     .catch(err => next(err))
 })
 
-router.delete("/:id", (req, res, next) => {
+router.delete('/:id', (req, res, next) => {
   const userId = req.user._id
   const _id = req.params.id
   return Restaurant.findOne({ _id, userId })
     .then(restaurant => restaurant.remove())
-    .then(() => res.redirect("/"))
+    .then(() => res.redirect('/'))
     .catch(err => next(err))
 })
 
